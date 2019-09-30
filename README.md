@@ -47,6 +47,9 @@ Function for normalizing input is quite primitve. This causes editing of this in
 
 I would look for some "Duration" component.
 
+#### 4. (not)Git mistake.
+I have been using IntelliJ for few months where "auto add new file" was enabled. Now with VSC and without this option I forgot to add new files while commiting... Because of that one of the last commits contains a lot of files that does not appear earlier.
+
 ### TODO 
 * require all fields before submit.
 * adjust Material UI Slider component or create custom slider component for `soup spiciness`
