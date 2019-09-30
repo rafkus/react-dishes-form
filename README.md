@@ -1,68 +1,52 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### About
+Form with conditionally displayed fields and server side validation. You can check successful response in console.
 
-In the project directory, you can run:
+Check demo here: 
 
-### `npm start`
+#### Technologies:
+* redux-form
+* material-ui
+* axios
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### To run this project type following commands
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+`git clone git@github.com:rafkus/react-dishes-form.git`
 
-### `npm test`
+`cd ./react-dishes-form`
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`npm install`
 
-### `npm run build`
+`npm start`
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Problems encountered
+#### 1. Unnecessary data in submitted JSON.
+Due to redux-form architecture submitted JSON may contain unnecessary data. We get undesirable behavior in following scenerio:
+* user choose pizza
+* user completes the entire form
+* user changes dish type to `soup` or `sandwich`
+* user completes form and clicks submit button.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Then submitted JSON contains details about `pizza` and other `dish`. It is due to poor implementation in redux-form. When `unregistered` action is dispatched fields are not removed from form. We can filter values in `submit` function. I didn't do that because additional that are not a problem for server - API does not return any error.  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Read more at: 
+* https://github.com/erikras/redux-form/issues/2761
+* https://github.com/erikras/redux-form/issues/2325
 
-### `npm run eject`
+#### 2. Slider from Material UI 
+redux-form does not handle change of value within MUI Slider. We have to handle it ourselfes. I didn't figure it out yet. I would follow this topic: https://github.com/erikras/redux-form/issues/369
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+redux-form-material-ui package is out of date.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+There is no problem with custom input (type="range") but I have choosen faster option: input type="number".
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### 3. Preparation time format
+Function for normalizing input is quite primitve. This causes editing of this input is not very comfortable. Scenario:
+* if there is completed preparation time eg. 01:22:00 and you want to edit minutes then you mark values in the middle. After keydown one of the numbers is changed and your caret jumps to the end.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+I would look for some "Duration" component.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### TODO 
+* require all fields before submit.
+* adjust Material UI Slider component or create custom slider component for `soup spiciness`
