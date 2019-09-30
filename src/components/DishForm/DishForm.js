@@ -4,6 +4,7 @@ import { Field, reduxForm } from "redux-form";
 import { SubmissionError, formValueSelector } from "redux-form";
 
 import renderField from "../../utils/renderField";
+import normalizePreparationTime from "../../utils/normalizePreparationTime";
 
 import PizzaDetails from "./DishDetails/PizzaDetails";
 import SoupDetails from "./DishDetails/SoupDetails";
@@ -57,6 +58,7 @@ let DishForm = props => {
         type="text"
         component={renderField}
         label="Preparation time"
+        normalize={normalizePreparationTime}
       />
 
       <div>
