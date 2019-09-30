@@ -50,3 +50,5 @@ I would look for some "Duration" component.
 ### TODO 
 * require all fields before submit.
 * adjust Material UI Slider component or create custom slider component for `soup spiciness`
+* use redux-thunk and action creators for request
+* set Preparation time placeholder for "00:00:00"
