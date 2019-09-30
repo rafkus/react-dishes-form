@@ -22,7 +22,7 @@ const Notes = () => {
         <li>Preparation time is not very user friendly while editing.</li>
         <li>There could be redundant data in submitted JSON. </li>
       </ul>
-      <p>Read more at github. <a href="https://github.com/rafkus/react-dishes-form">source</a></p>
+      <p>Read more at github: <a href="https://github.com/rafkus/react-dishes-form">source</a></p>
     </div>
   );
 };

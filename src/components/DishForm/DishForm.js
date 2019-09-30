@@ -22,19 +22,6 @@ import PizzaDetails from "./DishDetails/PizzaDetails";
 import SoupDetails from "./DishDetails/SoupDetails";
 import SandwichDetails from "./DishDetails/SandwichDetails";
 
-// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-// function submit2(values) {
-//   return sleep(100).then(() => {
-//     console.log(values);
-
-//     throw new SubmissionError({
-//       name: "User does not exist",
-//       _error: "Login failed!"
-//     });
-//   });
-// }
-
 const submit = values => {
   const URL = "https://frosty-wood-6558.getsandbox.com:443/dishes";
   return axios
@@ -94,14 +81,13 @@ let DishForm = props => {
 
       {dishDetails}
 
-
       {error && (
         <Typography variant="body1" gutterBottom>
           {error}
         </Typography>
       )}
 
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "2rem" }}>
         <Button
           type="submit"
           variant="contained"
