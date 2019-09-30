@@ -1,34 +1,54 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Field, reduxForm } from "redux-form";
-import { SubmissionError, formValueSelector } from "redux-form";
+import axios from "axios";
+import {
+  reduxForm,
+  Field,
+  SubmissionError,
+  formValueSelector
+} from "redux-form";
+
+import * as dishTypes from "../../utils/constants/dishTypes";
+import * as fieldNames from "../../utils/constants/fieldNames";
+import normalizePreparationTime from "../../utils/normalizePreparationTime";
 
 import renderTextField from "../../utils/renderTextField";
 import renderSelectField from "../../utils/renderSelectField";
-import normalizePreparationTime from "../../utils/normalizePreparationTime";
 
 import Button from "@material-ui/core/Button";
+import Typography from '@material-ui/core/Typography';
+
 import PizzaDetails from "./DishDetails/PizzaDetails";
 import SoupDetails from "./DishDetails/SoupDetails";
 import SandwichDetails from "./DishDetails/SandwichDetails";
 
-import * as dishTypes from "../../utils/constants/dishTypes";
-import * as fieldNames from "../../utils/constants/fieldNames";
+// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-// todo fix parse - there is an warning bacause of NaN
+// function submit2(values) {
+//   return sleep(100).then(() => {
+//     console.log(values);
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+//     throw new SubmissionError({
+//       name: "User does not exist",
+//       _error: "Login failed!"
+//     });
+//   });
+// }
 
-function submit(values) {
-  return sleep(100).then(() => {
-    console.log(values);
-
-    throw new SubmissionError({
-      name: "User does not exist",
-      _error: "Login failed!"
+const submit = values => {
+  const URL = "https://frosty-wood-6558.getsandbox.com:443/dishes";
+  return axios
+    .post(URL, values)
+    .then(response => {
+      console.log(response);
+    })
+    .catch(error => {
+      throw new SubmissionError({
+        ...error.response.data,
+        _error: "Please fill out the form correctly"
+      });
     });
-  });
-}
+};
 
 let DishForm = props => {
   const { error, handleSubmit, pristine, reset, submitting, dishType } = props;
@@ -66,6 +86,7 @@ let DishForm = props => {
         label="Dish type"
         inputProps={{ id: "dish-type", name: fieldNames.DISH_TYPE }}
       >
+      <option></option>
         <option value={dishTypes.PIZZA}>Pizza</option>
         <option value={dishTypes.SOUP}>Soup</option>
         <option value={dishTypes.SANDWICH}>Sandwich</option>
@@ -73,15 +94,21 @@ let DishForm = props => {
 
       {dishDetails}
 
-      {error && <strong>{error}</strong>}
-      <div style={{marginTop: '20px'}}>
+
+      {error && (
+        <Typography variant="body1" gutterBottom>
+          {error}
+        </Typography>
+      )}
+
+      <div style={{ marginTop: "20px" }}>
         <Button
           type="submit"
           variant="contained"
           color="primary"
           disabled={submitting}
         >
-          Primary
+          Submit
         </Button>
 
         <Button
@@ -99,9 +126,9 @@ let DishForm = props => {
 const FORM_NAME = "dish";
 DishForm = reduxForm({
   form: FORM_NAME,
-  initialValues: {
-    type: dishTypes.PIZZA
-  }
+  // initialValues: {
+    // type: dishTypes.PIZZA
+  // }
 })(DishForm);
 
 const selector = formValueSelector(FORM_NAME);
