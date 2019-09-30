@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### About
 Form with conditionally displayed fields and server side validation. You can check successful response in console.
 
-Check demo here: 
+Check demo here: https://rafkus.github.io/projects/react-dishes-form/
 
 #### Technologies:
 * redux-form
