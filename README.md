@@ -28,7 +28,7 @@ Due to redux-form architecture submitted JSON may contain unnecessary data. We g
 * user changes dish type to `soup` or `sandwich`
 * user completes form and clicks submit button.
 
-Then submitted JSON contains details about `pizza` and other `dish`. It is due to poor implementation in redux-form. When `unregistered` action is dispatched fields are not removed from form. We can filter values in `submit` function. I didn't do that because additional dara are not a problem for server - response doesn't conaint any errors.  
+Then submitted JSON contains details about `pizza` and other `dish`. It is due to poor implementation in redux-form. When `unregistered` action is dispatched fields are not removed from form. We can filter values in `submit` function. I didn't do that because additional data are not a problem for server - response doesn't conaint any errors.  
 
 Read more at: 
 * https://github.com/erikras/redux-form/issues/2761
