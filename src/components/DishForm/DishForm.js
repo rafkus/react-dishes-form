@@ -3,10 +3,19 @@ import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import { SubmissionError, formValueSelector } from "redux-form";
 
+import renderField from "../../utils/renderField";
+
+import PizzaDetails from "./DishDetails/PizzaDetails";
+import SoupDetails from "./DishDetails/SoupDetails";
+import SandwichDetails from "./DishDetails/SandwichDetails";
+
+import * as dishTypes from "../../utils/constants/dishTypes";
+import * as fieldNames from "../../utils/constants/fieldNames";
+
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function submit(values) {
-  return sleep(1000).then(() => {
+  return sleep(100).then(() => {
     console.log(values);
 
     throw new SubmissionError({
@@ -16,89 +25,35 @@ function submit(values) {
   });
 }
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={label} type={type} />
-      {touched && error && <span>{error}</span>}
-    </div>
-  </div>
-);
-
-const PizzaDetails = props => {
-  return (
-    <React.Fragment>
-      <Field
-        name="no_of_slices"
-        type="number"
-        component={renderField}
-        label="Number of slices"
-        parse={value => parseInt(value, 10)}
-      />
-      <Field
-        name="diameter"
-        type="number"
-        component={renderField}
-        label="diameter"
-        parse={value => parseInt(value, 10)}
-      />
-    </React.Fragment>
-  );
-};
-
-const SoupDetails = props => {
-  return (
-    <React.Fragment>
-      <Field
-        name="spiciness_scale"
-        type="number"
-        component={renderField}
-        label="Spiciness scale"
-        parse={value => parseInt(value, 10)}
-        min={1}
-        max={10}
-      />
-    </React.Fragment>
-  );
-};
-
-const SandwichDetails = props => {
-  return (
-    <React.Fragment>
-      <Field
-        name="slices_of_bread"
-        type="number"
-        component={renderField}
-        label="Slices of bread"
-        parse={value => parseInt(value, 10)}
-      />
-    </React.Fragment>
-  );
-};
-
 let DishForm = props => {
   const { error, handleSubmit, pristine, reset, submitting, dishType } = props;
 
   let dishDetails = null;
 
   switch (dishType) {
-    case "pizza": dishDetails = <PizzaDetails />
+    case dishTypes.PIZZA:
+      dishDetails = <PizzaDetails />;
       break;
-    case "soup":
+    case dishTypes.SOUP:
       dishDetails = <SoupDetails />;
       break;
-    case "sandwich":
+    case dishTypes.SANDWICH:
       dishDetails = <SandwichDetails />;
       break;
-    default: dishDetails = null; // default value in redux-form is set to pizza
+    default:
+      dishDetails = null; // default value in redux-form is set to pizza
   }
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <Field name="name" type="text" component={renderField} label="Name" />
       <Field
-        name="preparation_time"
+        name={fieldNames.NAME}
+        type="text"
+        component={renderField}
+        label="Name"
+      />
+      <Field
+        name={fieldNames.PREPARATION_TIME}
         type="text"
         component={renderField}
         label="Preparation time"
@@ -108,9 +63,9 @@ let DishForm = props => {
         <label>Dish type</label>
         <div>
           <Field name="type" component="select">
-            <option value="pizza">Pizza</option>
-            <option value="soup">Soup</option>
-            <option value="sandwich">Sandwich</option>
+            <option value={dishTypes.PIZZA}>Pizza</option>
+            <option value={dishTypes.SOUP}>Soup</option>
+            <option value={dishTypes.SANDWICH}>Sandwich</option>
           </Field>
         </div>
       </div>
@@ -130,17 +85,17 @@ let DishForm = props => {
   );
 };
 
+const FORM_NAME = "dish";
 DishForm = reduxForm({
-  form: "dish",
+  form: FORM_NAME,
   initialValues: {
-    type: "pizza"
-    // spiciness_scale: 5
+    type: dishTypes.PIZZA
   }
 })(DishForm);
 
-const selector = formValueSelector("dish");
+const selector = formValueSelector(FORM_NAME);
 DishForm = connect(state => {
-  const type = selector(state, "type");
+  const type = selector(state, fieldNames.DISH_TYPE);
   return {
     dishType: type
   };
